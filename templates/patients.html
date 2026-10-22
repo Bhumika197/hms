@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Patients Directory - HMS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Patient Management</h1>
+        <p class="page-subtitle">Register, search, view, edit, and manage hospital patients.</p>
+    </div>
+    <div>
+        <a href="{{ url_for('create_patient') }}" class="btn btn-primary" id="btn-register-patient">
+            + Register New Patient
+        </a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <form method="GET" action="{{ url_for('list_patients') }}" class="search-form">
+        <div class="search-input-group">
+            <input 
+                type="text" 
+                name="q" 
+                id="search-input" 
+                class="form-control" 
+                placeholder="Search by Patient ID (e.g. PAT-00001) or Full Name..." 
+                value="{{ query or '' }}"
+            >
+            <button type="submit" class="btn btn-secondary" id="btn-search">Search</button>
+            {% if query %}
+                <a href="{{ url_for('list_patients') }}" class="btn btn-outline" id="btn-clear-search">Clear</a>
+            {% endif %}
+        </div>
+        {% if query %}
+            <p class="search-info">
+                Showing results for "<strong>{{ query }}</strong>" ({{ patients|length }} found)
+            </p>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="data-table" id="patients-table">
+            <thead>
+                <tr>
+                    <th>Patient ID</th>
+                    <th>Full Name</th>
+                    <th>Date of Birth</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if patients %}
+                    {% for patient in patients %}
+                        <tr>
+                            <td>
+                                <span class="badge badge-code">{{ patient.patient_code }}</span>
+                            </td>
+                            <td class="font-bold">{{ patient.full_name }}</td>
+                            <td>{{ patient.date_of_birth }}</td>
+                            <td>
+                                <span class="badge badge-gender">{{ patient.gender }}</span>
+                            </td>
+                            <td>{{ patient.phone }}</td>
+                            <td>{{ patient.email or '—' }}</td>
+                            <td class="text-truncate" title="{{ patient.address }}">{{ patient.address }}</td>
+                            <td class="actions-cell">
+                                <a href="{{ url_for('edit_patient', patient_id=patient.id) }}" class="btn btn-sm btn-outline" id="edit-patient-{{ patient.id }}">
+                                    Edit
+                                </a>
+                                <form method="POST" action="{{ url_for('delete_patient', patient_id=patient.id) }}" class="inline-form" onsubmit="return confirm('Are you sure you want to delete patient {{ patient.patient_code }}?');">
+                                    <button type="submit" class="btn btn-sm btn-danger" id="delete-patient-{{ patient.id }}">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center empty-state">
+                            <div class="empty-icon">📁</div>
+                            <p class="empty-title">No patients found</p>
+                            <p class="empty-subtitle">
+                                {% if query %}
+                                    No records match your search query. Try another keyword or clear search.
+                                {% else %}
+                                    No patients registered yet. Start by adding a new patient record.
+                                {% endif %}
+                            </p>
+                            {% if not query %}
+                                <a href="{{ url_for('create_patient') }}" class="btn btn-primary mt-2">Register First Patient</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

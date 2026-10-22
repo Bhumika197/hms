@@ -1,5 +1,4 @@
 .venv/
 __pycache__/
-*.pyc
-hospital.db
-.vscode/
+*.db
+.pytest_cache/

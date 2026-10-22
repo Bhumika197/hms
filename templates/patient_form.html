@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}{% if is_edit %}Edit Patient - {{ patient.patient_code }}{% else %}Register Patient - HMS{% endif %}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card form-card">
+        <div class="card-header">
+            <h1 class="card-title">
+                {% if is_edit %}
+                    Edit Patient Record <span class="badge badge-code">{{ patient.patient_code }}</span>
+                {% else %}
+                    Register New Patient
+                {% endif %}
+            </h1>
+            <p class="card-subtitle">
+                {% if is_edit %}
+                    Update demographic and contact details for this patient.
+                {% else %}
+                    Fill in the details below to generate a new patient ID and profile.
+                {% endif %}
+            </p>
+        </div>
+
+        {% if errors.general %}
+            <div class="alert alert-danger mb-4">
+                <span class="alert-icon">✕</span>
+                <span class="alert-message">{{ errors.general }}</span>
+            </div>
+        {% endif %}
+
+        <form method="POST" novalidate class="validated-form">
+            <div class="form-group">
+                <label for="full_name" class="form-label required">Full Name</label>
+                <input 
+                    type="text" 
+                    id="full_name" 
+                    name="full_name" 
+                    class="form-control {% if errors.full_name %}is-invalid{% endif %}" 
+                    placeholder="e.g. Johnathan Doe" 
+                    value="{{ form.full_name or '' }}" 
+                    maxlength="100"
+                    required
+                >
+                {% if errors.full_name %}
+                    <div class="field-error" id="error-full_name">{{ errors.full_name }}</div>
+                {% endif %}
+                <small class="form-hint">Maximum 100 characters, letters only.</small>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="date_of_birth" class="form-label required">Date of Birth</label>
+                    <input 
+                        type="date" 
+                        id="date_of_birth" 
+                        name="date_of_birth" 
+                        class="form-control {% if errors.date_of_birth %}is-invalid{% endif %}" 
+                        value="{{ form.date_of_birth or '' }}" 
+                        required
+                    >
+                    {% if errors.date_of_birth %}
+                        <div class="field-error" id="error-date_of_birth">{{ errors.date_of_birth }}</div>
+                    {% endif %}
+                    <small class="form-hint">Format YYYY-MM-DD, between 1900 and today.</small>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="gender" class="form-label required">Gender</label>
+                    <select 
+                        id="gender" 
+                        name="gender" 
+                        class="form-control select-control {% if errors.gender %}is-invalid{% endif %}" 
+                        required
+                    >
+                        <option value="" disabled {% if not form.gender %}selected{% endif %}>Select Gender</option>
+                        <option value="Female" {% if form.gender == 'Female' %}selected{% endif %}>Female</option>
+                        <option value="Male" {% if form.gender == 'Male' %}selected{% endif %}>Male</option>
+                        <option value="Other" {% if form.gender == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                    {% if errors.gender %}
+                        <div class="field-error" id="error-gender">{{ errors.gender }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="phone" class="form-label required">Phone Number</label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        class="form-control {% if errors.phone %}is-invalid{% endif %}" 
+                        placeholder="e.g. +1 555-234-5678 or 9876543210" 
+                        value="{{ form.phone or '' }}" 
+                        required
+                    >
+                    {% if errors.phone %}
+                        <div class="field-error" id="error-phone">{{ errors.phone }}</div>
+                    {% endif %}
+                    <small class="form-hint">10 to 15 digits, optional leading +.</small>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="email" class="form-label">Email Address <span class="optional-tag">(Optional)</span></label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-control {% if errors.email %}is-invalid{% endif %}" 
+                        placeholder="e.g. patient@example.com" 
+                        value="{{ form.email or '' }}" 
+                        maxlength="254"
+                    >
+                    {% if errors.email %}
+                        <div class="field-error" id="error-email">{{ errors.email }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="address" class="form-label required">Residential Address</label>
+                <textarea 
+                    id="address" 
+                    name="address" 
+                    rows="3" 
+                    class="form-control {% if errors.address %}is-invalid{% endif %}" 
+                    placeholder="Enter complete residential address..." 
+                    maxlength="300"
+                    required
+                >{{ form.address or '' }}</textarea>
+                {% if errors.address %}
+                    <div class="field-error" id="error-address">{{ errors.address }}</div>
+                {% endif %}
+                <small class="form-hint">Maximum 300 characters.</small>
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ url_for('list_patients') }}" class="btn btn-outline" id="btn-cancel">Cancel</a>
+                <button type="submit" class="btn btn-primary" id="btn-submit-patient">
+                    {% if is_edit %}Save Changes{% else %}Register Patient{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
