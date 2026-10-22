@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Book Appointment - HMS{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card form-card">
+        <div class="card-header">
+            <h1 class="card-title">Book New Appointment</h1>
+            <p class="card-subtitle">Schedule an appointment for a registered patient with an available specialist.</p>
+        </div>
+
+        {% if errors.time_slot %}
+            <div class="alert alert-danger mb-4">
+                <span class="alert-icon">✕</span>
+                <span class="alert-message" id="error-conflict">{{ errors.time_slot }}</span>
+            </div>
+        {% endif %}
+
+        <form method="POST" novalidate class="validated-form">
+            <div class="form-group">
+                <label for="patient_code" class="form-label required">Patient ID</label>
+                <input 
+                    type="text" 
+                    id="patient_code" 
+                    name="patient_code" 
+                    class="form-control {% if errors.patient_code %}is-invalid{% endif %}" 
+                    placeholder="e.g. PAT-00001" 
+                    value="{{ form.patient_code or '' }}" 
+                    required
+                >
+                {% if errors.patient_code %}
+                    <div class="field-error" id="error-patient_code">{{ errors.patient_code }}</div>
+                {% endif %}
+                <small class="form-hint">Enter the unique registered patient ID (format: PAT-00001).</small>
+            </div>
+
+            <div class="form-group">
+                <label for="doctor_id" class="form-label required">Attending Doctor</label>
+                <select 
+                    id="doctor_id" 
+                    name="doctor_id" 
+                    class="form-control select-control {% if errors.doctor_id %}is-invalid{% endif %}" 
+                    required
+                >
+                    <option value="" disabled {% if not form.doctor_id %}selected{% endif %}>Select Doctor &amp; Specialization</option>
+                    {% for doctor in doctors %}
+                        <option value="{{ doctor.id }}" {% if form.doctor_id|string == doctor.id|string %}selected{% endif %}>
+                            {{ doctor.name }} — {{ doctor.specialization }}
+                        </option>
+                    {% endfor %}
+                </select>
+                {% if errors.doctor_id %}
+                    <div class="field-error" id="error-doctor_id">{{ errors.doctor_id }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="appointment_date" class="form-label required">Appointment Date</label>
+                    <input 
+                        type="date" 
+                        id="appointment_date" 
+                        name="appointment_date" 
+                        class="form-control {% if errors.appointment_date %}is-invalid{% endif %}" 
+                        value="{{ form.appointment_date or '' }}" 
+                        required
+                    >
+                    {% if errors.appointment_date %}
+                        <div class="field-error" id="error-appointment_date">{{ errors.appointment_date }}</div>
+                    {% endif %}
+                    <small class="form-hint">Date cannot be in the past.</small>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="appointment_time" class="form-label required">Time Slot</label>
+                    <select 
+                        id="appointment_time" 
+                        name="appointment_time" 
+                        class="form-control select-control {% if errors.appointment_time %}is-invalid{% endif %}" 
+                        required
+                    >
+                        <option value="" disabled {% if not form.appointment_time %}selected{% endif %}>Select 30-min Slot</option>
+                        {% for slot in time_slots %}
+                            <option value="{{ slot }}" {% if form.appointment_time == slot %}selected{% endif %}>
+                                {{ slot }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    {% if errors.appointment_time %}
+                        <div class="field-error" id="error-appointment_time">{{ errors.appointment_time }}</div>
+                    {% endif %}
+                    <small class="form-hint">Operating hours: 09:00 to 16:30.</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reason" class="form-label">Consultation Reason / Clinical Notes <span class="optional-tag">(Optional)</span></label>
+                <textarea 
+                    id="reason" 
+                    name="reason" 
+                    rows="3" 
+                    class="form-control {% if errors.reason %}is-invalid{% endif %}" 
+                    placeholder="Brief description of symptoms, routine checkup, or consultation reason..." 
+                    maxlength="500"
+                >{{ form.reason or '' }}</textarea>
+                {% if errors.reason %}
+                    <div class="field-error" id="error-reason">{{ errors.reason }}</div>
+                {% endif %}
+                <small class="form-hint">Maximum 500 characters.</small>
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ url_for('appointments_list') }}" class="btn btn-outline" id="btn-cancel">Cancel</a>
+                <button type="submit" class="btn btn-primary" id="btn-submit-appointment">
+                    Confirm Appointment
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

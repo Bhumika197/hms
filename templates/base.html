@@ -17,6 +17,9 @@
                 <a href="{{ url_for('list_patients') }}" class="nav-item {% if request.endpoint in ['list_patients', 'create_patient', 'edit_patient', 'patients_list', 'patient_new', 'patient_edit'] %}active{% endif %}">
                     Patients
                 </a>
+                <a href="{{ url_for('appointments_list') }}" class="nav-item {% if request.endpoint in ['appointments_list', 'appointment_new'] %}active{% endif %}">
+                    Appointments
+                </a>
             </nav>
         </div>
     </header>

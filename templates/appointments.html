@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Appointments - HMS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Appointment Management</h1>
+        <p class="page-subtitle">Schedule, review, and manage doctor consultations for registered patients.</p>
+    </div>
+    <div>
+        <a href="{{ url_for('appointment_new') }}" class="btn btn-primary" id="btn-book-appointment">
+            + Book New Appointment
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="data-table" id="appointments-table">
+            <thead>
+                <tr>
+                    <th>Patient ID</th>
+                    <th>Patient Name</th>
+                    <th>Doctor</th>
+                    <th>Specialization</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Reason / Notes</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if appointments %}
+                    {% for apt in appointments %}
+                        <tr>
+                            <td>
+                                <span class="badge badge-code">{{ apt.patient_code }}</span>
+                            </td>
+                            <td class="font-bold">{{ apt.patient_name }}</td>
+                            <td>{{ apt.doctor_name }}</td>
+                            <td>
+                                <span class="badge badge-spec">{{ apt.doctor_specialization }}</span>
+                            </td>
+                            <td>{{ apt.appointment_date }}</td>
+                            <td>
+                                <span class="badge badge-time">{{ apt.appointment_time }}</span>
+                            </td>
+                            <td>{{ apt.reason or '—' }}</td>
+                            <td class="actions-cell">
+                                <form method="POST" action="{{ url_for('appointment_cancel', appointment_id=apt.id) }}" class="inline-form" onsubmit="return confirm('Cancel appointment for patient {{ apt.patient_code }} on {{ apt.appointment_date }} at {{ apt.appointment_time }}?');">
+                                    <button type="submit" class="btn btn-sm btn-danger" id="cancel-apt-{{ apt.id }}">
+                                        Cancel
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center empty-state">
+                            <div class="empty-icon">📅</div>
+                            <p class="empty-title">No appointments scheduled</p>
+                            <p class="empty-subtitle">
+                                There are no active appointments found in the system.
+                            </p>
+                            <a href="{{ url_for('appointment_new') }}" class="btn btn-primary mt-2">Book First Appointment</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
