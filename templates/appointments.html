@@ -1,21 +1,39 @@
 {% extends "base.html" %}
 
-{% block title %}Appointments - HMS{% endblock %}
+{% block title %}Appointments - Apex Care{% endblock %}
 
 {% block content %}
+<!-- Page Header -->
 <div class="page-header">
     <div>
-        <h1 class="page-title">Appointment Management</h1>
-        <p class="page-subtitle">Schedule, review, and manage doctor consultations for registered patients.</p>
+        <h1 class="page-title">Appointments</h1>
+        <p class="page-subtitle">Schedule, review, and manage doctor consultations.</p>
     </div>
     <div>
         <a href="{{ url_for('appointment_new') }}" class="btn btn-primary" id="btn-book-appointment">
-            + Book New Appointment
+            + Book Appointment
         </a>
     </div>
 </div>
 
-<div class="card">
+<!-- Simple Calm Stat Bar -->
+<div class="stats-row">
+    <div class="stat-item">
+        <span class="stat-number">{{ appointments|length }}</span>
+        <span class="stat-label">Scheduled Visits</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-number">09:00 – 16:30</span>
+        <span class="stat-label">Consultation Hours</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-number">5 Doctors</span>
+        <span class="stat-label">Available Specialists</span>
+    </div>
+</div>
+
+<!-- Appointments Table Card -->
+<div class="card table-card">
     <div class="table-responsive">
         <table class="data-table" id="appointments-table">
             <thead>
@@ -27,7 +45,7 @@
                     <th>Date</th>
                     <th>Time</th>
                     <th>Reason / Notes</th>
-                    <th>Action</th>
+                    <th class="text-right">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,19 +55,27 @@
                             <td>
                                 <span class="badge badge-code">{{ apt.patient_code }}</span>
                             </td>
-                            <td class="font-bold">{{ apt.patient_name }}</td>
-                            <td>{{ apt.doctor_name }}</td>
+                            <td>
+                                <span class="patient-name">{{ apt.patient_name }}</span>
+                            </td>
+                            <td class="font-medium">{{ apt.doctor_name }}</td>
                             <td>
                                 <span class="badge badge-spec">{{ apt.doctor_specialization }}</span>
                             </td>
-                            <td>{{ apt.appointment_date }}</td>
+                            <td class="text-secondary">{{ apt.appointment_date }}</td>
                             <td>
                                 <span class="badge badge-time">{{ apt.appointment_time }}</span>
                             </td>
-                            <td>{{ apt.reason or '—' }}</td>
-                            <td class="actions-cell">
+                            <td>
+                                {% if apt.reason %}
+                                    <span class="reason-text" title="{{ apt.reason }}">{{ apt.reason }}</span>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td class="actions-cell text-right">
                                 <form method="POST" action="{{ url_for('appointment_cancel', appointment_id=apt.id) }}" class="inline-form" onsubmit="return confirm('Cancel appointment for patient {{ apt.patient_code }} on {{ apt.appointment_date }} at {{ apt.appointment_time }}?');">
-                                    <button type="submit" class="btn btn-sm btn-danger" id="cancel-apt-{{ apt.id }}">
+                                    <button type="submit" class="btn btn-sm btn-ghost-danger" id="cancel-apt-{{ apt.id }}">
                                         Cancel
                                     </button>
                                 </form>
@@ -59,12 +85,13 @@
                 {% else %}
                     <tr>
                         <td colspan="8" class="text-center empty-state">
-                            <div class="empty-icon">📅</div>
                             <p class="empty-title">No appointments scheduled</p>
                             <p class="empty-subtitle">
-                                There are no active appointments found in the system.
+                                There are no active consultations in the schedule.
                             </p>
-                            <a href="{{ url_for('appointment_new') }}" class="btn btn-primary mt-2">Book First Appointment</a>
+                            <a href="{{ url_for('appointment_new') }}" class="btn btn-primary mt-2">
+                                Book First Appointment
+                            </a>
                         </td>
                     </tr>
                 {% endif %}

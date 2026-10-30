@@ -1,30 +1,49 @@
 {% extends "base.html" %}
 
-{% block title %}Patients Directory - HMS{% endblock %}
+{% block title %}Patient Directory - Apex Care{% endblock %}
 
 {% block content %}
+<!-- Page Header -->
 <div class="page-header">
     <div>
-        <h1 class="page-title">Patient Management</h1>
-        <p class="page-subtitle">Register, search, view, edit, and manage hospital patients.</p>
+        <h1 class="page-title">Patients</h1>
+        <p class="page-subtitle">Manage patient registrations, contact details, and records.</p>
     </div>
     <div>
         <a href="{{ url_for('create_patient') }}" class="btn btn-primary" id="btn-register-patient">
-            + Register New Patient
+            + Register Patient
         </a>
     </div>
 </div>
 
-<div class="card mb-4">
+<!-- Simple Calm Stat Bar -->
+<div class="stats-row">
+    <div class="stat-item">
+        <span class="stat-number">{{ patients|length }}</span>
+        <span class="stat-label">Total Patients</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-number">5</span>
+        <span class="stat-label">Doctors Available</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-number">Active</span>
+        <span class="stat-label">System Status</span>
+    </div>
+</div>
+
+<!-- Search Bar -->
+<div class="card search-card">
     <form method="GET" action="{{ url_for('list_patients') }}" class="search-form">
-        <div class="search-input-group">
+        <div class="search-group">
             <input 
                 type="text" 
                 name="q" 
                 id="search-input" 
                 class="form-control" 
-                placeholder="Search by Patient ID (e.g. PAT-00001) or Full Name..." 
+                placeholder="Search by Patient ID (e.g. PAT-00001) or name..." 
                 value="{{ query or '' }}"
+                autocomplete="off"
             >
             <button type="submit" class="btn btn-secondary" id="btn-search">Search</button>
             {% if query %}
@@ -32,26 +51,27 @@
             {% endif %}
         </div>
         {% if query %}
-            <p class="search-info">
+            <p class="search-result-hint">
                 Showing results for "<strong>{{ query }}</strong>" ({{ patients|length }} found)
             </p>
         {% endif %}
     </form>
 </div>
 
-<div class="card">
+<!-- Patients Directory Table -->
+<div class="card table-card">
     <div class="table-responsive">
         <table class="data-table" id="patients-table">
             <thead>
                 <tr>
                     <th>Patient ID</th>
-                    <th>Full Name</th>
+                    <th>Name</th>
                     <th>Date of Birth</th>
                     <th>Gender</th>
                     <th>Phone</th>
                     <th>Email</th>
                     <th>Address</th>
-                    <th>Actions</th>
+                    <th class="text-right">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,20 +81,22 @@
                             <td>
                                 <span class="badge badge-code">{{ patient.patient_code }}</span>
                             </td>
-                            <td class="font-bold">{{ patient.full_name }}</td>
-                            <td>{{ patient.date_of_birth }}</td>
+                            <td>
+                                <span class="patient-name">{{ patient.full_name }}</span>
+                            </td>
+                            <td class="text-secondary">{{ patient.date_of_birth }}</td>
                             <td>
                                 <span class="badge badge-gender">{{ patient.gender }}</span>
                             </td>
-                            <td>{{ patient.phone }}</td>
-                            <td>{{ patient.email or '—' }}</td>
+                            <td class="text-secondary">{{ patient.phone }}</td>
+                            <td class="text-secondary">{{ patient.email or '—' }}</td>
                             <td class="text-truncate" title="{{ patient.address }}">{{ patient.address }}</td>
-                            <td class="actions-cell">
+                            <td class="actions-cell text-right">
                                 <a href="{{ url_for('edit_patient', patient_id=patient.id) }}" class="btn btn-sm btn-outline" id="edit-patient-{{ patient.id }}">
                                     Edit
                                 </a>
-                                <form method="POST" action="{{ url_for('delete_patient', patient_id=patient.id) }}" class="inline-form" onsubmit="return confirm('Are you sure you want to delete patient {{ patient.patient_code }}?');">
-                                    <button type="submit" class="btn btn-sm btn-danger" id="delete-patient-{{ patient.id }}">
+                                <form method="POST" action="{{ url_for('delete_patient', patient_id=patient.id) }}" class="inline-form" onsubmit="return confirm('Delete patient {{ patient.patient_code }}?');">
+                                    <button type="submit" class="btn btn-sm btn-ghost-danger" id="delete-patient-{{ patient.id }}">
                                         Delete
                                     </button>
                                 </form>
@@ -84,17 +106,18 @@
                 {% else %}
                     <tr>
                         <td colspan="8" class="text-center empty-state">
-                            <div class="empty-icon">📁</div>
                             <p class="empty-title">No patients found</p>
                             <p class="empty-subtitle">
                                 {% if query %}
-                                    No records match your search query. Try another keyword or clear search.
+                                    No records match your search. Try another keyword or clear the search.
                                 {% else %}
-                                    No patients registered yet. Start by adding a new patient record.
+                                    No patients registered yet. Start by creating a patient record.
                                 {% endif %}
                             </p>
                             {% if not query %}
-                                <a href="{{ url_for('create_patient') }}" class="btn btn-primary mt-2">Register First Patient</a>
+                                <a href="{{ url_for('create_patient') }}" class="btn btn-primary mt-2">
+                                    Register First Patient
+                                </a>
                             {% endif %}
                         </td>
                     </tr>

@@ -1,0 +1,131 @@
+﻿.\.venv\Scripts\python.exe : test_appointment_list_ordering 
+(test_appointments.TestAppointmentManagement.test_appointment_list_ordering)
+At line:1 char:49
++ ... ocs -Force; .\.venv\Scripts\python.exe -m unittest discover -s tests  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_appointmen..._list_ordering):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Functional: Test that appointments list orders ascending by date then time. ... ok
+test_boundary_time_slots (test_appointments.TestAppointmentManagement.test_boundary_time_slots)
+Boundary Value Analysis: Test opening 09:00 and closing 16:30 time slots. ... ok
+test_cancel_appointment_success (test_appointments.TestAppointmentManagement.test_cancel_appointment_success)
+Functional: Test that cancelling an appointment deletes it from database. ... ok
+test_cancel_nonexistent_appointment_returns_404 
+(test_appointments.TestAppointmentManagement.test_cancel_nonexistent_appointment_returns_404)
+Functional: Test that attempting to cancel non-existent appointment returns 404. ... ok
+test_duplicate_booking_blocked (test_appointments.TestAppointmentManagement.test_duplicate_booking_blocked)
+Functional: Test that duplicate booking for same doctor, date and time is rejected. ... ok
+test_invalid_date_format (test_appointments.TestAppointmentManagement.test_invalid_date_format)
+Equivalence Partitioning: Test that non-standard date format is rejected. ... ok
+test_invalid_time_slot (test_appointments.TestAppointmentManagement.test_invalid_time_slot)
+Equivalence Partitioning: Test that an unlisted time slot is rejected. ... ok
+test_missing_appointment_date (test_appointments.TestAppointmentManagement.test_missing_appointment_date)
+Validation: Test that omitting appointment date returns validation error. ... ok
+test_missing_doctor_selection (test_appointments.TestAppointmentManagement.test_missing_doctor_selection)
+Validation: Test that omitting doctor selection returns validation error. ... ok
+test_missing_patient_id (test_appointments.TestAppointmentManagement.test_missing_patient_id)
+Validation: Test that omitting patient ID returns validation error. ... ok
+test_missing_time_slot (test_appointments.TestAppointmentManagement.test_missing_time_slot)
+Validation: Test that omitting appointment time slot returns validation error. ... ok
+test_nonexistent_doctor_id (test_appointments.TestAppointmentManagement.test_nonexistent_doctor_id)
+Equivalence Partitioning: Test that selecting invalid doctor ID returns error. ... ok
+test_past_appointment_date_rejected (test_appointments.TestAppointmentManagement.test_past_appointment_date_rejected)
+Boundary Value Analysis: Test that yesterday date is rejected. ... ok
+test_same_time_different_doctor_allowed 
+(test_appointments.TestAppointmentManagement.test_same_time_different_doctor_allowed)
+Functional: Test that booking the same time slot with a different doctor is allowed. ... ok
+test_today_appointment_date_allowed (test_appointments.TestAppointmentManagement.test_today_appointment_date_allowed)
+Boundary Value Analysis: Test that today appointment date is accepted. ... ok
+test_unknown_patient_id_booking_rejected 
+(test_appointments.TestAppointmentManagement.test_unknown_patient_id_booking_rejected)
+Equivalence Partitioning: Test booking with non-existent patient ID is rejected. ... ok
+test_valid_appointment_booking (test_appointments.TestAppointmentManagement.test_valid_appointment_booking)
+Functional: Test booking a valid appointment for a registered patient. ... ok
+test_defect_1_name_accepting_symbols_and_numbers 
+(test_defects.TestDefectReproduction.test_defect_1_name_accepting_symbols_and_numbers)
+Test whether full name containing symbols and numbers (e.g. 'R2D2!!') is rejected. ... ok
+test_defect_2_search_wildcard_percent_and_underscore 
+(test_defects.TestDefectReproduction.test_defect_2_search_wildcard_percent_and_underscore)
+Test whether search treats '%' and '_' as literal characters instead of SQL wildcards. ... ok
+test_defect_3_phone_with_all_identical_digits 
+(test_defects.TestDefectReproduction.test_defect_3_phone_with_all_identical_digits)
+Test whether invalid dummy phone numbers like '0000000000' are rejected. ... ok
+test_defect_4_duplicate_patient_registration 
+(test_defects.TestDefectReproduction.test_defect_4_duplicate_patient_registration)
+Test whether registering identical patient (same name, DOB, and phone) is prevented. ... ok
+test_404_page_not_found (test_integration.TestIntegration.test_404_page_not_found)
+Integration: Test application returns custom 404 page for nonexistent paths. ... ok
+test_cancel_appointment_allows_subsequent_patient_deletion 
+(test_integration.TestIntegration.test_cancel_appointment_allows_subsequent_patient_deletion)
+Integration: Test that cancelling all appointments unlocks patient deletion. ... ok
+test_end_to_end_patient_registration_and_appointment_workflow 
+(test_integration.TestIntegration.test_end_to_end_patient_registration_and_appointment_workflow)
+Integration: Full E2E flow from patient registration to doctor appointment lookup. ... ok
+test_patient_with_appointments_cannot_be_deleted 
+(test_integration.TestIntegration.test_patient_with_appointments_cannot_be_deleted)
+Integration: Test that a patient with booked appointments cannot be deleted. ... ok
+test_root_redirect_and_navigation_links (test_integration.TestIntegration.test_root_redirect_and_navigation_links)
+Integration: Test root path redirect to /patients and navigation bar elements. ... ok
+test_date_of_birth_before_1900 (test_patients.TestPatientManagement.test_date_of_birth_before_1900)
+Boundary Value Analysis: Test that date of birth prior to 1900 is rejected. ... ok
+test_date_of_birth_in_future (test_patients.TestPatientManagement.test_date_of_birth_in_future)
+Boundary Value Analysis: Test that future date of birth is rejected. ... ok
+test_delete_patient_success (test_patients.TestPatientManagement.test_delete_patient_success)
+Functional: Test deleting an existing patient without appointments. ... ok
+test_edit_patient_success (test_patients.TestPatientManagement.test_edit_patient_success)
+Functional: Test updating existing patient record. ... ok
+test_edit_patient_validation_failure (test_patients.TestPatientManagement.test_edit_patient_validation_failure)
+Validation: Test that invalid input during edit preserves record and shows error. ... ok
+test_invalid_email_format (test_patients.TestPatientManagement.test_invalid_email_format)
+Equivalence Partitioning: Test that malformed email is rejected. ... ok
+test_invalid_gender (test_patients.TestPatientManagement.test_invalid_gender)
+Equivalence Partitioning: Test that non-standard gender selection is rejected. ... ok
+test_missing_address (test_patients.TestPatientManagement.test_missing_address)
+Validation: Test that omitting address triggers required validation error. ... ok
+test_missing_date_of_birth (test_patients.TestPatientManagement.test_missing_date_of_birth)
+Validation: Test that omitting date_of_birth triggers required validation error. ... ok
+test_missing_full_name (test_patients.TestPatientManagement.test_missing_full_name)
+Validation: Test that omitting full_name triggers required validation error. ... ok
+test_missing_gender (test_patients.TestPatientManagement.test_missing_gender)
+Validation: Test that omitting gender triggers required validation error. ... ok
+test_missing_phone (test_patients.TestPatientManagement.test_missing_phone)
+Validation: Test that omitting phone number triggers required validation error. ... ok
+test_name_length_boundary_100_characters (test_patients.TestPatientManagement.test_name_length_boundary_100_characters)
+Boundary Value Analysis: Test that name with exactly 100 characters is accepted. ... ok
+test_name_length_boundary_101_characters (test_patients.TestPatientManagement.test_name_length_boundary_101_characters)
+Boundary Value Analysis: Test that name with 101 characters is rejected. ... ok
+test_name_must_contain_at_least_one_letter 
+(test_patients.TestPatientManagement.test_name_must_contain_at_least_one_letter)
+Validation: Test that name consisting solely of spaces or numbers is rejected. ... ok
+test_optional_empty_email_allowed (test_patients.TestPatientManagement.test_optional_empty_email_allowed)
+Equivalence Partitioning: Test that omitting optional email succeeds. ... ok
+test_patient_not_found_404 (test_patients.TestPatientManagement.test_patient_not_found_404)
+Functional: Test that accessing or editing non-existent patient returns 404. ... ok
+test_phone_boundary_10_digits (test_patients.TestPatientManagement.test_phone_boundary_10_digits)
+Boundary Value Analysis: Test that exactly 10 digits phone number is accepted. ... ok
+test_phone_boundary_15_digits (test_patients.TestPatientManagement.test_phone_boundary_15_digits)
+Boundary Value Analysis: Test that exactly 15 digits phone number is accepted. ... ok
+test_phone_boundary_16_digits (test_patients.TestPatientManagement.test_phone_boundary_16_digits)
+Boundary Value Analysis: Test that 16 digits phone number is rejected. ... ok
+test_phone_boundary_9_digits (test_patients.TestPatientManagement.test_phone_boundary_9_digits)
+Boundary Value Analysis: Test that 9 digits phone number is rejected. ... ok
+test_phone_formatting_strips_spaces_and_dashes 
+(test_patients.TestPatientManagement.test_phone_formatting_strips_spaces_and_dashes)
+Functional: Test that phone formatting with spaces, brackets and dashes is cleaned. ... ok
+test_phone_with_leading_plus (test_patients.TestPatientManagement.test_phone_with_leading_plus)
+Equivalence Partitioning: Test that valid phone with leading plus is accepted. ... ok
+test_phone_with_letters (test_patients.TestPatientManagement.test_phone_with_letters)
+Validation: Test that phone numbers containing alphabetic letters are rejected. ... ok
+test_search_by_name_case_insensitive_partial 
+(test_patients.TestPatientManagement.test_search_by_name_case_insensitive_partial)
+Functional: Test searching patient directory by name partial case-insensitive. ... ok
+test_search_by_patient_id (test_patients.TestPatientManagement.test_search_by_patient_id)
+Functional: Test searching patient directory by exact and partial patient code. ... ok
+test_valid_patient_registration (test_patients.TestPatientManagement.test_valid_patient_registration)
+Functional: Test successful patient registration and PAT-00001 code generation. ... ok
+
+----------------------------------------------------------------------
+Ran 53 tests in 2.905s
+
+OK

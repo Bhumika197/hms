@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Book Appointment - HMS{% endblock %}
+{% block title %}Book Appointment - Apex Care{% endblock %}
 
 {% block content %}
 <div class="form-container">
     <div class="card form-card">
         <div class="card-header">
-            <h1 class="card-title">Book New Appointment</h1>
-            <p class="card-subtitle">Schedule an appointment for a registered patient with an available specialist.</p>
+            <h1 class="card-title">Book Appointment</h1>
+            <p class="card-subtitle">Schedule a consultation with an attending doctor.</p>
         </div>
 
         {% if errors.time_slot %}
@@ -32,11 +32,11 @@
                 {% if errors.patient_code %}
                     <div class="field-error" id="error-patient_code">{{ errors.patient_code }}</div>
                 {% endif %}
-                <small class="form-hint">Enter the unique registered patient ID (format: PAT-00001).</small>
+                <small class="form-hint">Enter the registered unique ID (format: PAT-00001).</small>
             </div>
 
             <div class="form-group">
-                <label for="doctor_id" class="form-label required">Attending Doctor</label>
+                <label for="doctor_id" class="form-label required">Doctor</label>
                 <select 
                     id="doctor_id" 
                     name="doctor_id" 
@@ -90,18 +90,18 @@
                     {% if errors.appointment_time %}
                         <div class="field-error" id="error-appointment_time">{{ errors.appointment_time }}</div>
                     {% endif %}
-                    <small class="form-hint">Operating hours: 09:00 to 16:30.</small>
+                    <small class="form-hint">Available: 09:00 to 16:30.</small>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="reason" class="form-label">Consultation Reason / Clinical Notes <span class="optional-tag">(Optional)</span></label>
+                <label for="reason" class="form-label">Reason / Notes <span class="optional-tag">(Optional)</span></label>
                 <textarea 
                     id="reason" 
                     name="reason" 
                     rows="3" 
                     class="form-control {% if errors.reason %}is-invalid{% endif %}" 
-                    placeholder="Brief description of symptoms, routine checkup, or consultation reason..." 
+                    placeholder="Brief description of consultation reason..." 
                     maxlength="500"
                 >{{ form.reason or '' }}</textarea>
                 {% if errors.reason %}

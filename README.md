@@ -8,24 +8,25 @@ A clean, robust, and accessible Hospital Management System built with **Python 3
 
 ## System Modules
 
-### Module 1: Patient Registration and Management
-- **Registration**: Registers new patients with full demographics and automatically assigns a formatted unique ID (`PAT-00001`, `PAT-00002`, ...).
-- **Directory & Search**: Lists all registered patients (newest first) with case-insensitive search by Patient ID or Name (with SQL wildcard character protection).
-- **Edit & Update**: Allows updating patient demographics and contact details while preventing duplicates.
-- **Deletion**: Secure deletion of patient records.
-- **Server-Side Validation**:
+### Module 1: Patient Registration and Management (Epic SCRUM-9)
+- **Registration (SCRUM-7)**: Registers new patients with full demographics and automatically assigns an immutable formatted unique ID (`PAT-00001`, `PAT-00002`, ...).
+- **Directory & Search (SCRUM-8)**: Lists all registered patients (newest first) with case-insensitive search by Patient ID or Name (with SQL wildcard protection).
+- **Validation (SCRUM-11)**: Strict server-side validation:
   - Full Name: required, max 100 characters, letters only (with spaces, hyphens, and apostrophes).
   - Date of Birth: required, format `YYYY-MM-DD`, between 1900 and today.
   - Gender: required, choice of `Female`, `Male`, or `Other`.
   - Phone Number: required, sanitized of spaces/dashes/brackets, 10 to 15 digits with optional leading `+`, non-repetitive.
   - Email: optional, validated format up to 254 characters.
   - Address: required, max 300 characters.
+  - Duplicate Protection: Rejects duplicate submissions with identical Name, DOB, and Phone.
+- **Edit & Update (SCRUM-12)**: Allows updating patient demographics and contact details while preserving validation integrity.
+- **Deletion Lock**: Patients with scheduled appointments cannot be deleted until appointments are cancelled.
 
-### Module 2: Appointment Management (Integration)
+### Module 2: Appointment Management (Epic SCRUM-10)
 - **Doctor Roster**: Pre-seeded roster of medical specialists (Cardiology, General Physician, Paediatrics, Orthopaedic Surgery, Dermatology).
-- **Appointment Scheduling**: Books consultation appointments for registered patients (`PAT-xxxxx`) across 30-minute intervals between 09:00 and 16:30.
-- **Conflict Prevention**: Database-level unique constraint preventing double-booking for the same doctor, date, and time.
-- **Referential Integrity**: Patients with scheduled appointments cannot be deleted until appointments are cancelled.
+- **Appointment Scheduling (SCRUM-13, SCRUM-14)**: Books consultation appointments for registered patients (`PAT-xxxxx`) across 30-minute intervals between 09:00 and 16:30.
+- **Conflict Prevention (SCRUM-15)**: Database-level unique constraint preventing double-booking for the same doctor, date, and time.
+- **Appointment Directory & Cancellation (SCRUM-16)**: Chronologically ordered consultations with cancellation support.
 
 ---
 
@@ -66,29 +67,6 @@ CREATE TABLE appointments (
 
 ---
 
-## Project Structure
-
-```
-hms/
-├── app.py                 # Flask app, SQLite setup, validation & routes
-├── requirements.txt       # Flask>=3.1,<4.0
-├── README.md              # Project documentation & run guide
-├── TEST_CASES.md          # 31 verified test cases with techniques
-├── .gitignore             # .venv/, __pycache__/, *.db
-├── templates/
-│   ├── base.html          # Base layout, navbar, flash messages, footer
-│   ├── patients.html      # Patient directory with search and actions
-│   ├── patient_form.html  # Patient registration & edit form with inline errors
-│   └── 404.html           # Custom 404 error page
-├── static/
-│   └── style.css          # Clean, modern stylesheet (plain CSS)
-└── tests/
-    ├── test_patients.py   # Module 1 test suite (27 unit & validation tests)
-    └── test_defects.py    # Regression tests for identified quality defects
-```
-
----
-
 ## Installation & Setup
 
 ### 1. Clone the repository
@@ -123,8 +101,27 @@ Open **http://127.0.0.1:5000** in your browser.
 
 ## Running the Automated Test Suite
 
-Run the full `unittest` test suite with isolated temporary databases:
+Run the full 53-test `unittest` test suite with isolated temporary databases:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
+
+Execution results:
+```
+Ran 53 tests in 2.9s
+OK (100% Passed)
+```
+
+Log artifact: [`docs/test_run.txt`](docs/test_run.txt)
+
+---
+
+## Documentation Library
+
+- [`docs/requirements.md`](docs/requirements.md): System functional specifications and Jira user stories.
+- [`docs/test_cases.md`](docs/test_cases.md): 53 test cases with inputs, expected and actual results.
+- [`docs/black_box_tests.md`](docs/black_box_tests.md): Boundary Value Analysis (BVA) and Equivalence Partitioning (EP).
+- [`docs/white_box_tests.md`](docs/white_box_tests.md): Branch coverage analysis and basis path verification.
+- [`docs/bug_log.md`](docs/bug_log.md): Defect report, severity, steps to reproduce, and retest evidence.
+- [`docs/demo_script.md`](docs/demo_script.md): 10-step viva presentation script with spoken lines.

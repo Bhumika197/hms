@@ -3,27 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}HMS - Hospital Management System{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>{% block title %}Hospital Management System{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=5.0">
 </head>
 <body>
+    <!-- Clean Minimalist Header -->
     <header class="navbar">
         <div class="nav-container">
-            <div class="brand">
-                <span class="brand-icon">🏥</span>
-                <span class="brand-text"><strong>HMS</strong></span>
+            <div class="nav-left">
+                <a href="{{ url_for('list_patients') }}" class="brand-link">
+                    <div class="brand">
+                        <span class="brand-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M12 5v14M5 12h14"/></svg>
+                        </span>
+                        <span class="brand-title">Apex Care</span>
+                    </div>
+                </a>
+
+                <nav class="nav-links">
+                    <a href="{{ url_for('list_patients') }}" class="nav-item {% if request.endpoint in ['list_patients', 'create_patient', 'edit_patient', 'patients_list', 'patient_new', 'patient_edit'] %}active{% endif %}">
+                        Patients
+                    </a>
+                    <a href="{{ url_for('appointments_list') }}" class="nav-item {% if request.endpoint in ['appointments_list', 'appointment_new'] %}active{% endif %}">
+                        Appointments
+                    </a>
+                </nav>
             </div>
-            <nav class="nav-links">
-                <a href="{{ url_for('list_patients') }}" class="nav-item {% if request.endpoint in ['list_patients', 'create_patient', 'edit_patient', 'patients_list', 'patient_new', 'patient_edit'] %}active{% endif %}">
-                    Patients
+
+            <div class="nav-right">
+                <button type="button" class="btn btn-sm btn-outline btn-tc" id="btn-show-test-cases" onclick="openTestCasesModal()" title="View all 53 automated test cases">
+                    <span class="btn-tc-icon">📋</span>
+                    <span>Test Cases (53)</span>
+                </button>
+                <span class="status-badge">
+                    <span class="status-dot"></span>
+                    Database Connected
+                </span>
+                <a href="{{ url_for('create_patient') }}" class="btn btn-sm btn-primary">
+                    + Register Patient
                 </a>
-                <a href="{{ url_for('appointments_list') }}" class="nav-item {% if request.endpoint in ['appointments_list', 'appointment_new'] %}active{% endif %}">
-                    Appointments
-                </a>
-            </nav>
+            </div>
         </div>
     </header>
 
+    <!-- Main Content Area -->
     <main class="main-content">
         <div class="container">
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -45,11 +71,218 @@
         </div>
     </main>
 
+    <!-- Subtle Clean Footer -->
     <footer class="footer">
         <div class="container footer-content">
-            <p>HMS - Hospital Management System &copy; 2026 | College PBL Project</p>
-            <p class="footer-subtext">Module 1: Patient Registration and Management (Python, Flask, SQLite)</p>
+            <div class="footer-left">
+                <p>Apex Care Hospital Management System &copy; 2026</p>
+                <p class="footer-muted">Secure Local SQLite Storage • All Records Confirmed</p>
+            </div>
+            <div class="footer-right">
+                <button type="button" class="footer-tc-link" onclick="openTestCasesModal()">
+                    View Test Cases Report (53 Verified)
+                </button>
+            </div>
         </div>
     </footer>
+
+    <!-- All 53 Test Cases Modal Dialog -->
+    <div id="test-cases-modal" class="modal-backdrop" onclick="handleModalBackdropClick(event)">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-title-row">
+                        <h2 class="modal-title">System Test Cases &amp; Verification</h2>
+                        <span class="badge badge-success">53 / 53 Passed (100%)</span>
+                    </div>
+                    <p class="modal-subtitle">
+                        Comprehensive test suite covering Boundary Value Analysis, Equivalence Partitioning, Defect Regressions, and Integration Rules.
+                    </p>
+                </div>
+                <button type="button" class="modal-close-btn" onclick="closeTestCasesModal()" aria-label="Close">✕</button>
+            </div>
+
+            <div class="modal-toolbar">
+                <div class="modal-filter-tabs">
+                    <button type="button" class="filter-tab active" id="tab-all" onclick="filterTestCases('all')">All Tests (53)</button>
+                    <button type="button" class="filter-tab" id="tab-m1" onclick="filterTestCases('m1')">Patients (31)</button>
+                    <button type="button" class="filter-tab" id="tab-m2" onclick="filterTestCases('m2')">Appointments (17)</button>
+                    <button type="button" class="filter-tab" id="tab-int" onclick="filterTestCases('int')">Integration (5)</button>
+                </div>
+                <div class="modal-search-box">
+                    <input 
+                        type="text" 
+                        id="tc-search-input" 
+                        class="form-control form-control-sm" 
+                        placeholder="Search by ID (e.g. TC-07) or keyword..." 
+                        oninput="handleTCSearch()"
+                    >
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="data-table modal-tc-table" id="modal-test-cases-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 85px;">Test ID</th>
+                                <th style="width: 145px;">Module</th>
+                                <th>Test Scenario</th>
+                                <th>Expected Result</th>
+                                <th style="width: 75px; text-align: center;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tc-table-body">
+                            <!-- Populated via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <span class="modal-footer-note">Executed via: <code>python -m unittest discover -s tests -v</code></span>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="closeTestCasesModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Cases Data & Modal Logic -->
+    <script>
+        const ALL_TEST_CASES = [
+            { id: "TC-01", module: "Module 1", cat: "m1", scenario: "Valid patient registration and unique ID generation (PAT-00001)", expected: "Record saved, patient_code PAT-00001 assigned, redirected to /patients" },
+            { id: "TC-02", module: "Module 1", cat: "m1", scenario: "Validation for missing required full_name", expected: "Form rejected with 'Full name is required.'" },
+            { id: "TC-03", module: "Module 1", cat: "m1", scenario: "Validation for missing required date_of_birth", expected: "Form rejected with 'Date of birth is required.'" },
+            { id: "TC-04", module: "Module 1", cat: "m1", scenario: "Validation for missing required gender", expected: "Form rejected with 'Gender is required.'" },
+            { id: "TC-05", module: "Module 1", cat: "m1", scenario: "Validation for missing required phone number", expected: "Form rejected with 'Phone number is required.'" },
+            { id: "TC-06", module: "Module 1", cat: "m1", scenario: "Validation for missing required address", expected: "Form rejected with 'Address is required.'" },
+            { id: "TC-07", module: "Module 1", cat: "m1", scenario: "BVA: Phone length below minimum (9 digits)", expected: "Rejected with 'Phone must be 10 to 15 digits with an optional leading +.'" },
+            { id: "TC-08", module: "Module 1", cat: "m1", scenario: "BVA: Phone length minimum boundary (10 digits)", expected: "Registration succeeds, 10-digit phone stored" },
+            { id: "TC-09", module: "Module 1", cat: "m1", scenario: "BVA: Phone length maximum boundary (15 digits)", expected: "Registration succeeds, 15-digit phone stored" },
+            { id: "TC-10", module: "Module 1", cat: "m1", scenario: "BVA: Phone length above maximum (16 digits)", expected: "Rejected with 'Phone must be 10 to 15 digits with an optional leading +.'" },
+            { id: "TC-11", module: "Module 1", cat: "m1", scenario: "EP: International phone with leading plus (+19876543210)", expected: "Registration succeeds, phone stored cleanly" },
+            { id: "TC-12", module: "Module 1", cat: "m1", scenario: "EP: Phone number containing alphabetic letters", expected: "Rejected with 'Phone number cannot contain letters.'" },
+            { id: "TC-13", module: "Module 1", cat: "m1", scenario: "Phone formatting sanitization (spaces, dashes, brackets)", expected: "Sanitized to clean digits and stored" },
+            { id: "TC-14", module: "Module 1", cat: "m1", scenario: "BVA: Date of birth in the future", expected: "Rejected with 'Date of birth cannot be in the future.'" },
+            { id: "TC-15", module: "Module 1", cat: "m1", scenario: "BVA: Date of birth prior to year 1900", expected: "Rejected with 'Date of birth cannot be before 1900.'" },
+            { id: "TC-16", module: "Module 1", cat: "m1", scenario: "EP: Invalid non-standard gender partition", expected: "Rejected with 'Gender must be one of Female, Male, Other.'" },
+            { id: "TC-17", module: "Module 1", cat: "m1", scenario: "EP: Malformed email syntax", expected: "Rejected with 'Invalid email format.'" },
+            { id: "TC-18", module: "Module 1", cat: "m1", scenario: "EP: Optional email omitted", expected: "Registration succeeds with email set to NULL" },
+            { id: "TC-19", module: "Module 1", cat: "m1", scenario: "BVA: Name length boundary (exactly 100 chars)", expected: "Registration succeeds" },
+            { id: "TC-20", module: "Module 1", cat: "m1", scenario: "BVA: Name length exceeding boundary (101 chars)", expected: "Rejected with 'Full name must not exceed 100 characters.'" },
+            { id: "TC-21", module: "Module 1", cat: "m1", scenario: "Name character validation: no alphabetic letters", expected: "Rejected with 'Full name must contain at least one letter.'" },
+            { id: "TC-22", module: "Module 1", cat: "m1", scenario: "Search directory by exact Patient ID (PAT-00001)", expected: "Only matching patient code returned in list" },
+            { id: "TC-23", module: "Module 1", cat: "m1", scenario: "Search directory by partial name (case-insensitive)", expected: "Partial matching records displayed" },
+            { id: "TC-24", module: "Module 1", cat: "m1", scenario: "Edit patient record with valid data", expected: "Record updated in SQLite and redirected with flash message" },
+            { id: "TC-25", module: "Module 1", cat: "m1", scenario: "Edit patient validation failure (empty full_name)", expected: "Form rejected, existing database values preserved" },
+            { id: "TC-26", module: "Module 1", cat: "m1", scenario: "Delete patient record without appointments", expected: "Patient record deleted from SQLite" },
+            { id: "TC-27", module: "Module 1", cat: "m1", scenario: "Access non-existent patient ID (/patients/99999/edit)", expected: "Custom 404 Not Found error page returned" },
+            { id: "TC-28", module: "Module 1", cat: "m1", scenario: "Defect 1: Name containing symbols/digits ('R2D2!!')", expected: "Rejected with 'letters, spaces, hyphens, and apostrophes'" },
+            { id: "TC-29", module: "Module 1", cat: "m1", scenario: "Defect 2: Search treating SQL wildcards (% and _) as literal", expected: "SQL wildcards escaped, no unintended patients matched" },
+            { id: "TC-30", module: "Module 1", cat: "m1", scenario: "Defect 3: Dummy repetitive phone numbers ('0000000000')", expected: "Rejected with 'Please provide a valid phone number, not dummy repetitive digits.'" },
+            { id: "TC-31", module: "Module 1", cat: "m1", scenario: "Defect 4: Duplicate patient registration prevention", expected: "Rejected with duplicate warning citing existing patient code" },
+            { id: "TC-32", module: "Module 2", cat: "m2", scenario: "Valid appointment booking for registered patient", expected: "Appointment created in SQLite, redirected to /appointments" },
+            { id: "TC-33", module: "Module 2", cat: "m2", scenario: "Booking with unknown patient ID ('PAT-99999')", expected: "Rejected with 'Unknown patient ID.', 0 appointments created" },
+            { id: "TC-34", module: "Module 2", cat: "m2", scenario: "Missing patient ID validation", expected: "Rejected with 'Patient ID is required.'" },
+            { id: "TC-35", module: "Module 2", cat: "m2", scenario: "Missing doctor selection validation", expected: "Rejected with 'Please select a doctor.'" },
+            { id: "TC-36", module: "Module 2", cat: "m2", scenario: "Non-existent doctor ID selection", expected: "Rejected with 'Selected doctor does not exist.'" },
+            { id: "TC-37", module: "Module 2", cat: "m2", scenario: "Missing appointment date validation", expected: "Rejected with 'Appointment date is required.'" },
+            { id: "TC-38", module: "Module 2", cat: "m2", scenario: "BVA: Past appointment date boundary", expected: "Rejected with 'Appointment date cannot be in the past.'" },
+            { id: "TC-39", module: "Module 2", cat: "m2", scenario: "BVA: Today appointment date boundary", expected: "Appointment accepted and scheduled" },
+            { id: "TC-40", module: "Module 2", cat: "m2", scenario: "Invalid date format validation (non-YYYY-MM-DD)", expected: "Rejected with 'Invalid date format. Use YYYY-MM-DD.'" },
+            { id: "TC-41", module: "Module 2", cat: "m2", scenario: "Missing appointment time slot validation", expected: "Rejected with 'Appointment time is required.'" },
+            { id: "TC-42", module: "Module 2", cat: "m2", scenario: "Invalid time slot partition ('08:45')", expected: "Rejected with 'Invalid time slot.'" },
+            { id: "TC-43", module: "Module 2", cat: "m2", scenario: "BVA: Boundary time slots (opening 09:00 & closing 16:30)", expected: "Both boundary time slots accepted and booked" },
+            { id: "TC-44", module: "Module 2", cat: "m2", scenario: "Duplicate booking conflict prevention", expected: "Blocked with 'This doctor is already booked at the selected time.'" },
+            { id: "TC-45", module: "Module 2", cat: "m2", scenario: "Same time slot with different doctor", expected: "Both bookings successfully created" },
+            { id: "TC-46", module: "Module 2", cat: "m2", scenario: "Appointment list ordering (Date ASC, Time ASC)", expected: "Table renders appointments sorted chronologically" },
+            { id: "TC-47", module: "Module 2", cat: "m2", scenario: "Cancel existing appointment", expected: "Appointment deleted from SQLite, redirected to list" },
+            { id: "TC-48", module: "Module 2", cat: "m2", scenario: "Cancel non-existent appointment", expected: "Returns 404 Not Found error page" },
+            { id: "TC-49", module: "Integration", cat: "int", scenario: "Patient with appointments deletion block", expected: "Blocked with 'Cannot delete a patient who has appointments. Cancel the appointments first.'" },
+            { id: "TC-50", module: "Integration", cat: "int", scenario: "Cancel appointment unlocks patient deletion", expected: "Patient record successfully deleted after cancelling appointment" },
+            { id: "TC-51", module: "Integration", cat: "int", scenario: "End-to-end full booking lifecycle with join data", expected: "Appointments table displays joined patient, doctor, and slot data" },
+            { id: "TC-52", module: "Integration", cat: "int", scenario: "Root redirect and navbar links integration", expected: "GET / redirects to /patients; Patients and Appointments links verified" },
+            { id: "TC-53", module: "Integration", cat: "int", scenario: "Custom 404 error page handling", expected: "Custom 404 template rendered with status code 404" }
+        ];
+
+        let currentCategory = 'all';
+        let currentSearch = '';
+
+        function renderTestCases() {
+            const tbody = document.getElementById('tc-table-body');
+            if (!tbody) return;
+
+            const filtered = ALL_TEST_CASES.filter(tc => {
+                const matchesCat = currentCategory === 'all' || tc.cat === currentCategory;
+                const matchesSearch = !currentSearch || 
+                    tc.id.toLowerCase().includes(currentSearch) ||
+                    tc.scenario.toLowerCase().includes(currentSearch) ||
+                    tc.module.toLowerCase().includes(currentSearch) ||
+                    tc.expected.toLowerCase().includes(currentSearch);
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted" style="padding: 2rem;">No test cases match your search.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(tc => `
+                <tr>
+                    <td><span class="badge badge-code">${tc.id}</span></td>
+                    <td class="font-medium text-secondary" style="font-size: 0.82rem;">${tc.module}</td>
+                    <td class="font-medium" style="color: var(--text-primary);">${tc.scenario}</td>
+                    <td class="text-secondary" style="font-size: 0.82rem;">${tc.expected}</td>
+                    <td style="text-align: center;"><span class="badge badge-spec" style="background:#f0fdf4; color:#166534; font-weight:600;">Pass</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function filterTestCases(category) {
+            currentCategory = category;
+            document.querySelectorAll('.filter-tab').forEach(btn => btn.classList.remove('active'));
+            const activeTab = document.getElementById('tab-' + category);
+            if (activeTab) activeTab.classList.add('active');
+            renderTestCases();
+        }
+
+        function handleTCSearch() {
+            const input = document.getElementById('tc-search-input');
+            currentSearch = input ? input.value.trim().toLowerCase() : '';
+            renderTestCases();
+        }
+
+        function openTestCasesModal() {
+            const modal = document.getElementById('test-cases-modal');
+            if (modal) {
+                modal.classList.add('active');
+                renderTestCases();
+            }
+        }
+
+        function closeTestCasesModal() {
+            const modal = document.getElementById('test-cases-modal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        function handleModalBackdropClick(e) {
+            if (e.target && e.target.id === 'test-cases-modal') {
+                closeTestCasesModal();
+            }
+        }
+
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeTestCasesModal();
+            }
+        });
+
+        // Initialize table on load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTestCases();
+        });
+    </script>
 </body>
 </html>

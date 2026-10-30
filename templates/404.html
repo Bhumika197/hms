@@ -1,16 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}404 - Page Not Found - HMS{% endblock %}
+{% block title %}404 - Page Not Found - Apex Care{% endblock %}
 
 {% block content %}
 <div class="empty-state card text-center py-5">
-    <div class="empty-icon">🔍</div>
     <h1 class="empty-title">404 - Page Not Found</h1>
     <p class="empty-subtitle">
-        The requested patient record or page could not be located in the system.
+        The requested record or page could not be located in the system.
     </p>
     <div class="mt-4">
-        <a href="{{ url_for('list_patients') }}" class="btn btn-primary">Return to Patient Directory</a>
+        <a href="{{ url_for('list_patients') }}" class="btn btn-primary">Return to Patients</a>
     </div>
 </div>
 {% endblock %}
