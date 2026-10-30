@@ -34,9 +34,9 @@
             </div>
 
             <div class="nav-right">
-                <button type="button" class="btn btn-sm btn-outline btn-tc" id="btn-show-test-cases" onclick="openTestCasesModal()" title="View all 53 automated test cases">
+                <button type="button" class="btn btn-sm btn-outline btn-tc" id="btn-show-test-cases" onclick="openTestCasesModal()" title="View all 55 automated test cases">
                     <span class="btn-tc-icon">📋</span>
-                    <span>Test Cases (53)</span>
+                    <span>Test Cases (55)</span>
                 </button>
                 <span class="status-badge">
                     <span class="status-dot"></span>
@@ -80,20 +80,20 @@
             </div>
             <div class="footer-right">
                 <button type="button" class="footer-tc-link" onclick="openTestCasesModal()">
-                    View Test Cases Report (53 Verified)
+                    View Test Cases Report (55 Verified)
                 </button>
             </div>
         </div>
     </footer>
 
-    <!-- All 53 Test Cases Modal Dialog -->
+    <!-- All 55 Test Cases Modal Dialog -->
     <div id="test-cases-modal" class="modal-backdrop" onclick="handleModalBackdropClick(event)">
         <div class="modal-card">
             <div class="modal-header">
                 <div>
                     <div class="modal-title-row">
                         <h2 class="modal-title">System Test Cases &amp; Verification</h2>
-                        <span class="badge badge-success">53 / 53 Passed (100%)</span>
+                        <span class="badge badge-success">55 / 55 Passed (100%)</span>
                     </div>
                     <p class="modal-subtitle">
                         Comprehensive test suite covering Boundary Value Analysis, Equivalence Partitioning, Defect Regressions, and Integration Rules.
@@ -104,8 +104,8 @@
 
             <div class="modal-toolbar">
                 <div class="modal-filter-tabs">
-                    <button type="button" class="filter-tab active" id="tab-all" onclick="filterTestCases('all')">All Tests (53)</button>
-                    <button type="button" class="filter-tab" id="tab-m1" onclick="filterTestCases('m1')">Patients (31)</button>
+                    <button type="button" class="filter-tab active" id="tab-all" onclick="filterTestCases('all')">All Tests (55)</button>
+                    <button type="button" class="filter-tab" id="tab-m1" onclick="filterTestCases('m1')">Patients (33)</button>
                     <button type="button" class="filter-tab" id="tab-m2" onclick="filterTestCases('m2')">Appointments (17)</button>
                     <button type="button" class="filter-tab" id="tab-int" onclick="filterTestCases('int')">Integration (5)</button>
                 </div>
@@ -201,7 +201,9 @@
             { id: "TC-50", module: "Integration", cat: "int", scenario: "Cancel appointment unlocks patient deletion", expected: "Patient record successfully deleted after cancelling appointment" },
             { id: "TC-51", module: "Integration", cat: "int", scenario: "End-to-end full booking lifecycle with join data", expected: "Appointments table displays joined patient, doctor, and slot data" },
             { id: "TC-52", module: "Integration", cat: "int", scenario: "Root redirect and navbar links integration", expected: "GET / redirects to /patients; Patients and Appointments links verified" },
-            { id: "TC-53", module: "Integration", cat: "int", scenario: "Custom 404 error page handling", expected: "Custom 404 template rendered with status code 404" }
+            { id: "TC-53", module: "Integration", cat: "int", scenario: "Custom 404 error page handling", expected: "Custom 404 template rendered with status code 404" },
+            { id: "TC-54", module: "Module 1", cat: "m1", scenario: "Address BVA: 14 characters below minimum", expected: "Rejected with 'Address must be at least 15 characters.'" },
+            { id: "TC-55", module: "Module 1", cat: "m1", scenario: "Address BVA: 15 characters minimum boundary", expected: "Accepted and patient registered successfully" }
         ];
 
         let currentCategory = 'all';

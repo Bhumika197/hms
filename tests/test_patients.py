@@ -83,6 +83,17 @@ class TestPatientManagement(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn(b'Address is required', response.data)
 
+    def test_address_boundary_14_characters(self):
+        """Boundary Value Analysis: Test that address below 15 characters is rejected."""
+        response = self._register_patient(address='12345678901234')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b'Address must be at least 15 characters', response.data)
+
+    def test_address_boundary_15_characters(self):
+        """Boundary Value Analysis: Test that address with exactly 15 characters is accepted."""
+        response = self._register_patient(address='123456789012345')
+        self.assertEqual(response.status_code, 302)
+
     def test_phone_boundary_9_digits(self):
         """Boundary Value Analysis: Test that 9 digits phone number is rejected."""
         response = self._register_patient(phone='123456789')
@@ -240,7 +251,7 @@ class TestPatientManagement(unittest.TestCase):
             'gender': 'Male',
             'phone': '9123456780',
             'email': 'updated@example.com',
-            'address': 'New Address'
+            'address': '742 Evergreen Terrace, Springfield'
         }
         response = self.client.post(f'/patients/{pid}/edit', data=update_data, follow_redirects=False)
         self.assertEqual(response.status_code, 400)

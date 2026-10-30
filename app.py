@@ -171,6 +171,8 @@ def validate_patient(form_data):
     # address validation
     if not address:
         errors['address'] = "Address is required."
+    elif len(address) < 15:
+        errors['address'] = "Address must be at least 15 characters."
     elif len(address) > 300:
         errors['address'] = "Address must not exceed 300 characters."
 

@@ -75,3 +75,4 @@ A structured 10-step demonstration walkthrough for college Project-Based Learnin
 - **Action**: In Jira, navigate to Reports -> Sprint Report, demonstrating 100% completed story points with zero incomplete issues.
 - **Spoken Line (Say out loud)**:  
   *"Our sprint report shows 100% completion of all committed scope across both modules, with every story backed by documented tests, passing code, and verified defect fixes."*
+

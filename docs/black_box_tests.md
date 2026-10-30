@@ -30,7 +30,13 @@ Boundary Value Analysis tests inputs at the extreme outer edges, exact boundary 
 - **Current Day Boundary**: `Today's Date` -> **Accepted (HTTP 302)** *(TC-39)*
 - **Future Date Valid**: `Tomorrow's Date` -> **Accepted (HTTP 302)**
 
-### 1.5 Clinic Operating Time Slots (Permitted: 09:00 to 16:30)
+### 1.5 Address Character Length (Permitted: 15 to 300 characters)
+- **Lower Edge Invalid (14 chars)**: ""12345678901234"" -> **Rejected (HTTP 400)** *(TC-54)*
+- **Lower Boundary Valid (15 chars)**: ""123456789012345"" -> **Accepted (HTTP 302)** *(TC-55)*
+- **Upper Boundary Valid (300 chars)**: 'A' * 300 -> **Accepted (HTTP 302)**
+- **Upper Edge Invalid (301 chars)**: 'A' * 301 -> **Rejected (HTTP 400)**
+
+### 1.6 Clinic Operating Time Slots (Permitted: 09:00 to 16:30)
 - **Opening Time Slot Boundary**: `"09:00"` -> **Accepted (HTTP 302)** *(TC-43)*
 - **Closing Time Slot Boundary**: `"16:30"` -> **Accepted (HTTP 302)** *(TC-43)*
 - **Pre-Opening Invalid Slot**: `"08:30"` -> **Rejected (HTTP 400)** *(TC-42)*
@@ -84,3 +90,4 @@ Equivalence Partitioning divides the input domain into classes of valid and inva
 | Appointment Date | Yesterday, Today | Valid vs malformed date string | 3 | **100% Pass** |
 | Doctor Allocation | Valid roster IDs | Existing vs non-existent | 2 | **100% Pass** |
 | Concurrency Guard | Same doc/time/date | Colliding slot vs distinct doc slot | 2 | **100% Pass** |
+

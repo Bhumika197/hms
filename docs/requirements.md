@@ -37,7 +37,7 @@ The Hospital Management System (HMS) is a centralized, accessible web applicatio
 - **FR-3.3 (Gender)**: Required. Must belong to the closed set `('Female', 'Male', 'Other')`.
 - **FR-3.4 (Phone Number)**: Required. Must be sanitized of spaces, hyphens, and parentheses. Must consist of 10 to 15 digits with an optional leading `+`. Repetitive dummy digits (e.g. `0000000000`) and alphabetic characters are rejected.
 - **FR-3.5 (Email Address)**: Optional. If supplied, must conform to standard RFC email syntax up to 254 characters.
-- **FR-3.6 (Address)**: Required, maximum 300 characters.
+- **FR-3.6 (Address)**: Required, minimum 15 characters, maximum 300 characters. Submissions with fewer than 15 characters are rejected with 'Address must be at least 15 characters.'
 - **FR-3.7 (Duplicate Prevention)**: The system must check for existing records matching `(full_name, date_of_birth, phone)` and reject duplicate registrations with HTTP 400.
 
 #### User Story SCRUM-12: Edit Patient Details
@@ -88,3 +88,4 @@ The Hospital Management System (HMS) is a centralized, accessible web applicatio
 3. **Database Configuration**:
    - SQLite3 database initialized with `PRAGMA foreign_keys = ON;`.
    - Dynamic path resolution via `HMS_DATABASE` environment variable defaulting to local `hospital.db`.
+

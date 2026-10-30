@@ -2,7 +2,7 @@
 
 **Execution Command**: `python -m unittest discover -s tests -v`  
 **Execution Timestamp**: October 30, 2026  
-**Total Tests**: 53 | **Passed**: 53 | **Failed**: 0 | **Pass Rate**: 100%  
+**Total Tests**: 55 | **Passed**: 55 | **Failed**: 0 | **Pass Rate**: 100%  
 **Output Log**: [`docs/test_run.txt`](test_run.txt)
 
 ---
@@ -64,3 +64,7 @@
 | **TC-51** | Integration | End-to-end full booking lifecycle with join data | HTTP 200, patient, doctor, specialization rendered | HTTP 200, all joined fields present | **Pass** |
 | **TC-52** | Integration | Root redirect and navigation links integration | HTTP 302 to /patients, navbar links valid | HTTP 302 to /patients, verified | **Pass** |
 | **TC-53** | Integration | Application 404 handling on unknown route | HTTP 404, custom 404 page rendered | HTTP 404, custom 404 template | **Pass** |
+
+
+| **TC-54** | SCRUM-11 | Address BVA: 14 characters (12345678901234) below minimum | HTTP 400, "Address must be at least 15 characters." | HTTP 400, error message displayed | **Pass** |
+| **TC-55** | SCRUM-11 | Address BVA: 15 characters (123456789012345) minimum boundary | HTTP 302, patient registered successfully | HTTP 302, record created in DB | **Pass** |

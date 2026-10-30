@@ -80,3 +80,4 @@ OK (100% Passed)
 - [`docs/white_box_tests.md`](white_box_tests.md): Branch coverage and basis path verification.
 - [`docs/bug_log.md`](bug_log.md): Defect logs, reproduction steps, severity, and commit fixes.
 - [`docs/demo_script.md`](demo_script.md): 10-step viva presentation script with spoken lines.
+

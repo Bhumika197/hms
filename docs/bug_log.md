@@ -82,3 +82,4 @@
 - **Severity**: High (Data Integrity & Relational Collisions)
 - **Fix Implementation**: Pre-insert database uniqueness check querying `WHERE LOWER(full_name) = LOWER(?) AND date_of_birth = ? AND phone = ?`.
 - **Status**: Fixed in commit `9367a86`, retested OK (TC-31 passed).
+

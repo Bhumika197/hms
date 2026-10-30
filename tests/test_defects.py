@@ -43,7 +43,7 @@ class TestDefectReproduction(unittest.TestCase):
             'gender': 'Female',
             'phone': '9876543210',
             'email': 'alice@example.com',
-            'address': '101 First Ave'
+            'address': '101 First Avenue, Springfield'
         })
         self.client.post('/patients/new', data={
             'full_name': 'Bob Normal',
@@ -51,7 +51,7 @@ class TestDefectReproduction(unittest.TestCase):
             'gender': 'Male',
             'phone': '9876543211',
             'email': 'bob@example.com',
-            'address': '202 Second Ave'
+            'address': '202 Second Avenue, Springfield'
         })
 
         # Searching for '%' should NOT return any patients because neither has '%' in their name or code

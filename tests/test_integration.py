@@ -33,7 +33,7 @@ class TestIntegration(unittest.TestCase):
             'gender': 'Female',
             'phone': '9876543210',
             'email': 'clara@tardis.org',
-            'address': 'London, UK'
+            'address': '10 Downing Street, London, UK'
         })
 
         conn = get_db_connection()
@@ -76,7 +76,7 @@ class TestIntegration(unittest.TestCase):
             'gender': 'Male',
             'phone': '9876543211',
             'email': 'rory@example.com',
-            'address': 'Leadworth, UK'
+            'address': 'Leadworth Village, Gloucester, UK'
         })
 
         conn = get_db_connection()
